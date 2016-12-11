@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="user-scalable=yes, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" /><!-- target-densitydpi=device-dpi -->
+        <title>VPMS</title>
+        <link type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap.css">
+        <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Ubuntu'>
+    </head>
+    <body>
+        <div class="jumbotron text-center" style="margin: 0px; position: absolute; width: 100%; height: 100%;">
+            <p style="font-family: Ubuntu; font-size: 20px;">
+                <span style="text-shadow: 1px 1px 2px #aaa;">Mobile app available <br>@</span><br>
+                <img alt="android app" src="img/PlayStore.png" id="android" height="48" width="150">
+                <img alt="ios app" src="img/AppStore.gif" id="ios" height="48" width="150"><br>
+                <u><a class="text-danger" href="VisitorRequest.html" style="font-size: 15px;">No Thanks</a></u>
+            </p>
+        </div>
+        <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#android").hide();
+                $("#ios").hide();
+                if (/Android/i.test(navigator.userAgent)) {
+                    $("#android").show();
+                    $("#android").click(function () {
+                        var url = "market://details?id=com.kpcl.vpms";
+                        window.location.replace(url, '_system');
+                    });
+                }
+                else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                    $("#ios").show();
+                    $("#ios").click(function () {
+                        var url = "itms-apps://itunes.apple.com/app/id1107217604";
+                        window.location.replace(url, '_system');
+                    });
+                }
+                else {
+                    window.location.href = 'VisitorRequest.html';
+                }
+            });
+        </script>
+    </body>
+</html>

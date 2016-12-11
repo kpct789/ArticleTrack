@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <!--<meta name="msapplication-tap-highlight" content="no" />-->
+        <meta name="viewport" content="user-scalable=yes, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+        <title>Create Article</title>
+        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" type="text/css" href="css/loading.css">
+		<link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Raleway'>
+        <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Ubuntu'>
+    </head>
+    <body onload="onLoad()">
+        <div id="loading" class="loading">Loading&#8230;</div>
+        <div id="header1" class="headerbar">
+            <img alt="logo" class="imglogo" src="img/logo.png"><br>
+            <strong><span class="headertext">KRISHNAPATNAM PORT</span></strong>
+        </div>
+        <div class="container-fluid text-center">
+            <div class="page-header text-left">
+                <span id="myModalLabel">Article Creation</span>
+            </div>
+            <form class="form-horizontal text-left" role="form">
+                <div class="form-group">
+                    <label for="txtitemname" class="col-lg-2 control-label">Name</label>
+                    <div class="col-lg-10">                        
+                                 <input type="text" class="inputtext" id="txtitemname" name="txtitemname" value="">
+                    </div>
+                    
+                      <label for="txtitemcode" class="col-lg-2 control-label">Code</label>
+                    <div class="col-lg-10">                        
+                                 <input type="text" class="inputtext" id="txtitemcode" name="txtitemcode" value="">
+                    </div>
+                    
+                    <label for="txtitemtype" class="col-lg-2 control-label">Type</label>
+                    <div class="col-lg-10">
+                                <select id="sellist" class="inputtext">
+            <option value="0" selected>Select</option>
+        </select>
+                    </div>
+                    
+                    
+                    <label for="txtitemdesc" class="col-lg-2 control-label">Description</label>
+                    <div class="col-lg-10">                        
+                            <input type="text" cols="40" rows="5" class="inputtext" id="txtitemdesc" name="txtitemdesc"
+                                   value="">                        
+                    </div>
+                    
+                    
+                    <div class="col-lg-2"></div>
+                    <div class="col-lg-10">
+                        <br>
+                        <button type="button" class="btn btn-custom" id="btnSubmit">Create Article<span class="glyphicon glyphicon-circle-arrow-down"></span></button>
+                    </div>
+                </div> 
+                <input type="hidden" id="hiditemcode">
+            </form>
+        </div>        
+        <!--<div class="navbar-fixed-bottom footer">
+            <div class="text-center">
+                <small><span class="text-primary">© <script>document.write(new Date().getFullYear())</script> - KRISHNAPATNAM PORT COMPANY LTD.</span></small>
+            </div>
+        </div>-->
+    </body>
+</html>
+<script type="text/ecmascript" src="bootstrap/js/bootstrap.min.js"></script>
+<script type="text/ecmascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+<script type="text/javascript">
+    var clntHeight = parseFloat(document.documentElement.clientHeight) - 140;   
+    function onLoad() {
+        document.addEventListener("deviceready", onDeviceReady, false);
+    }
+
+    /* device APIs are available */
+    function onDeviceReady() {
+        /* Register the event listener */
+        document.addEventListener("backbutton", onBackKeyDown, false);
+        checkConnection();
+    }
+
+    /* Handle the back button */
+    function onBackKeyDown() {
+    }
+
+    function isPhoneGap() {
+        return (window.cordova || window.PhoneGap || window.phonegap)
+            && /^file:\/{3}[^\/]/i.test(window.location.href)
+            && /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent);
+    }
+
+    function checkConnection() {
+        if (isPhoneGap()) {
+            var networkState = navigator.connection.type;
+            var states = {};
+            states[Connection.UNKNOWN] = 'Unknown connection';
+            states[Connection.ETHERNET] = 'Ethernet connection';
+            states[Connection.WIFI] = 'WiFi connection';
+            states[Connection.CELL_2G] = 'Cell 2G connection';
+            states[Connection.CELL_3G] = 'Cell 3G connection';
+            states[Connection.CELL_4G] = 'Cell 4G connection';
+            states[Connection.CELL] = 'Cell generic connection';
+            states[Connection.NONE] = 'No network connection';
+
+            //alert('Connection type: ' + states[networkState]);
+            if (states[networkState] == 'No network connection' || states[networkState] == 'Unknown connection')
+                alert('No Internet Connection. Please Check.');
+        }
+    }
+    var myvar = setInterval(checkConnection, 3000);
+ function qs() {
+        debugger;
+        var query = window.location.search.substring(1);
+        var parms = query.split('&');
+        for (var i = 0; i < parms.length; i++) {
+            var pos = parms[i].indexOf('=');
+            if (pos > 0) {
+                var key = parms[i].substring(0, pos);
+                var val = parms[i].substring(pos + 1);
+                qsParm[key] = val;
+            }
+        }
+
+        if (parms.length > 0) {
+            $("#hiditemcode").val(qsParm["id"]);
+            var textname = $('#hiditemcode');            
+        }
+    }
+  
+
+    $(document).ready(function () {        
+        $("#loading").show();                
+        qs();
+        var itemcode = $('#hiditemcode').val(); 
+        $("txtitemcode").val(itemcode);
+             $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            url: 'http://172.168.8.151/ArticleIssue/api/Articleissue/GetItemTypes',
+            dataType: "json",
+            data: '{}',
+            async: false,
+            success: function (deptresult) {
+                $.each(deptresult, function (key, deptvalue) {
+                    $("#sellist").append($("<option></option>").val(deptvalue.TypeID).html(deptvalue.TypeName));
+                });
+            },
+            error: function (result) {
+                console.log(result);
+                //window.location.href = 'TestF.html?reqid=' + $("#hidRequestId").val() + '&mail=' + $("#hidEmail").val();
+            }
+        });   
+         $("#loading").hide();
+    });
+    $("#btnSubmit").click(function () {
+        var _sell = $("#sellist option:selected").val();
+        var apiURLarticle = 'http://172.168.8.151/ArticleIssue/api/Articleissue/AddArticle';
+        debugger;
+        var Adddata = {};
+        Adddata.Itemname = $("#txtitemname").val();
+        Adddata.TypeID = _sell;
+        Adddata.Itemdescription = $("#txtitemdesc").val();
+        Adddata.Itemcode = $("#txtitemcode").val();
+        $.ajax({
+            url: apiURLarticle,
+            type: 'POST',
+            data: Adddata,
+            dataType: 'json',
+            success: function (data) {
+                alert('Created Article');
+            },
+            error: function (xhr, status, error) {
+                alert(status);
+                alert('Request Failed. Please try again.');
+                $("#test").val("");
+                $("#test1").val("");
+            }
+        });
+    });
+</script>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="user-scalable=yes, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+        <title>Visit Details</title>
+        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" type="text/css" href="css/loading.css">
+	    <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Raleway'>
+        <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Ubuntu'>
+    </head>
+    <body onload="onLoad()">
+        <div id="loading" class="loading">Loading&#8230;</div>
+        <div id="header1" class="headerbar">
+            <img alt="logo" class="imglogo" src="img/logo.png"><br>
+            <strong><span class="headertext">KRISHNAPATNAM PORT</span></strong>
+        </div>
+        <div id="container" class="container-fluid text-center">
+            <div class="page-header text-left">
+                <span id="myModalLabel">Visit Details</span>
+            </div>
+            <form id="form1" class="form-horizontal text-left" role="form">
+                <div class="form-group">
+                    <label for="txtCompany" class="col-lg-2 control-label">Company</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="inputtext text-capitalize" id="txtCompany" name="txtCompany" value="" required title="Please enter Company">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="txtDate" class="col-lg-2 control-label">Visit Date</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="inputtext" id="txtDate" name="txtDate" value="" required title="Please enter Visit Date" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="selDept" class="col-lg-2 control-label">Department</label>
+                    <div class="col-lg-10"><select id="selDept" class="inputtext">
+                        <option value="0" selected>Select</option>
+                    </select></div>
+                </div>
+                <div class="form-group">
+                    <label for="txtPersons" class="col-lg-2 control-label">Accompained Persons</label>
+                    <div class="col-lg-10">
+                        <small>
+                            <span class="text-danger">(Carry respective ID-Proofs When visiting the port)</span>
+                        </small>
+                    </div>
+                
+                    <div class="col-lg-10">
+                        <input type="number" class="inputtext" id="txtPersons" name="txtPersons" value="1" required title="Please enter the No of Persons visiting" min="1" max="10" maxlength="3">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="txtPurpose" class="col-lg-2 control-label">Visit Purpose</label>
+                    <div class="col-lg-10">
+                        <textarea class="inputtext text-capitalize" id="txtPurpose" name="txtPurpose" title="Please Enter the Visit Purpose" required rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="selVehType" class="col-lg-2 control-label">Vehicle Type</label>
+                    <div class="col-lg-10"><select id="selVehType" class="inputtext">
+                        <option value="0" selected>Select</option>
+                    </select></div>
+                </div>
+                <div class="form-group">
+                    <label for="txtVehNumber" class="col-lg-2 control-label">Vehicle No</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="inputtext text-uppercase" id="txtVehNumber" name="txtVehNumber" value="" disabled required title="Please enter Vehicle Number">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="drivetype" class="col-lg-2 control-label">Self Driving</label>&nbsp;
+                    <div class="col-lg-10"><div class="radio-inline">
+                        <label><input type="radio" name="drivetype" value="N" checked>No</label>
+                    </div>
+                    <div class="radio-inline">
+                        <label><input type="radio" name="drivetype" value="Y">Yes</label>
+                        </div></div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-2"></div>
+                    <div class="col-lg-10">
+                        <code class="text-center">* All Fields are mandatory.</code><br><br>
+                        <button type="button" class="btn btn-custom" id="btnSubmit">Submit  <span class="glyphicon glyphicon-ok-sign"></span></button>
+                    </div>
+                </div>                
+            </form>
+        </div>
+        <input type="hidden" id="hidRequestId">
+        <input type="hidden" id="hidEmail">
+        <!--<div class="navbar-fixed-bottom footer">
+            <div class="text-center">
+                <small><span class="text-primary">© <script>document.write(new Date().getFullYear())</script> - KRISHNAPATNAM PORT COMPANY LTD.</span></small>
+            </div>
+        </div>-->
+    </body>
+</html>
+<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript">
+    var apiURL = 'http://202.83.27.199/vpmsapi/api/VisitDetails/AddVisitDetails';
+    var deptURL = 'http://202.83.27.199/vpmsapi/api/Master/GetDepartments';
+    var vechTypeURL = 'http://202.83.27.199/vpmsapi/api/Master/GetVehicleType';
+    var qsParm = new Array();
+    var Email = null;
+    var _vehType = null;
+    function qs() {
+        var query = window.location.search.substring(1);
+        var parms = query.split('&');
+        for (var i = 0; i < parms.length; i++) {
+            var pos = parms[i].indexOf('=');
+            if (pos > 0) {
+                var key = parms[i].substring(0, pos);
+                var val = parms[i].substring(pos + 1);
+                qsParm[key] = val;
+            }
+        }
+        if (parms.length > 1) {
+            $("#hidRequestId").val(atob(qsParm["reqid"]));
+            $("#hidEmail").val(atob(qsParm["mail"]));
+            return true;
+        }
+        else {
+            window.location.href = 'VisitorRequest.html';
+            return false;
+        }
+    }
+
+    function onLoad() {
+        document.addEventListener("deviceready", onDeviceReady, false);
+    }
+
+    /* device APIs are available */
+    function onDeviceReady() {
+        /* Register the event listener */
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    /* Handle the back button */
+    function onBackKeyDown() {
+    }
+
+    function isPhoneGap() {
+        return (window.cordova || window.PhoneGap || window.phonegap)
+            && /^file:\/{3}[^\/]/i.test(window.location.href)
+            && /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent);
+    }
+
+    function checkConnection() {
+        if (isPhoneGap()) {
+            var networkState = navigator.connection.type;
+            var states = {};
+            states[Connection.UNKNOWN] = 'Unknown connection';
+            states[Connection.ETHERNET] = 'Ethernet connection';
+            states[Connection.WIFI] = 'WiFi connection';
+            states[Connection.CELL_2G] = 'Cell 2G connection';
+            states[Connection.CELL_3G] = 'Cell 3G connection';
+            states[Connection.CELL_4G] = 'Cell 4G connection';
+            states[Connection.CELL] = 'Cell generic connection';
+            states[Connection.NONE] = 'No network connection';
+
+            //alert('Connection type: ' + states[networkState]);
+            if (states[networkState] == 'No network connection' || states[networkState] == 'Unknown connection')
+                alert('No Internet Connection. Please Check.');
+        }
+    }
+    var myvar = setInterval(checkConnection, 3000);
+
+    $(document).ready(function () {
+        
+        var Status = qs();
+        $("#loading").hide();
+        if (Status) {
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: 'http://202.83.27.199/vpmsapi/api/Master/GetDepartments',
+                dataType: "json",
+                data: '{}',
+                async: false,
+                success: function (deptresult) {
+                    $.each(deptresult, function (key, deptvalue) {
+                        $("#selDept").append($("<option></option>").val(deptvalue.Id).html(deptvalue.Name));
+                    });
+                },
+                error: function (result) {
+                    console.log(result);
+                    window.location.href = 'VisitDetails.html?reqid=' + $("#hidRequestId").val() + '&mail=' + $("#hidEmail").val();
+                }
+            });
+
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: 'http://202.83.27.199/vpmsapi/api/Master/GetVehicleType',
+                dataType: "json",
+                data: '{}',
+                async: false,
+                success: function (vehresult) {
+                    $.each(vehresult, function (key, vehvalue) {
+                        $("#selVehType").append($("<option></option>").val(vehvalue.Id).html(vehvalue.Name));
+                    });
+                },
+                error: function (result) {
+                    console.log(result.message);
+                    window.location.href = 'VisitDetails.html?reqid=' + $("#hidRequestId").val() + '&mail=' + $("#hidEmail").val();
+                }
+            });
+        }
+
+        $("#txtDate").keypress(function () {
+            return false;
+        });
+
+        $("#txtDate").datepicker({
+            /*numberOfMonths: 2,*/
+            minDate: 0, maxDate: "+1M +10D"
+        });
+
+        $("#selVehType").change(function () {
+            var str = "";
+            $("#selVehType option:selected").each(function () {
+                str += $(this).text().trim();
+            });
+            if (str == "Select") {
+                _vehType = "";
+                $("#txtVehNumber").attr('disabled', 'disabled');
+            }
+            else {
+                _vehType = $("#selVehType option:selected").val()
+                $("#txtVehNumber").attr('disabled', false);
+                $("#txtVehNumber").focus();
+            }
+        });
+
+        $("#btnSubmit").click(function () {
+            var _dept = $("#selDept option:selected").val();
+            var _drivetype = $("input[name='drivetype']:checked").val();
+            if (FormValidations()) {
+                if (!ValidateText($("#txtCompany").val())) {
+                    alert('Numbers not allowed. Please enter valid Company Name');
+                    $("#txtCompany").focus();
+                    /* e.preventDefault(); */
+                    return false;
+                }
+                else if (!ValidateText($("#txtCompany").val())) {
+                    alert('Numbers not allowed. Please enter valid Company Name');
+                    $("#txtCompany").focus();
+                    /* e.preventDefault(); */
+                    return false;
+                }
+                else {
+                    $("#loading").show();
+                    var Adddata = {};
+                    Adddata.Company = $("#txtCompany").val();
+                    Adddata.VisitDate = $("#txtDate").val();
+                    Adddata.Department = _dept;
+                    Adddata.NoofPersons = $("#txtPersons").val();
+                    Adddata.VisitPurpose = $("#txtPurpose").val();
+                    Adddata.VehicleNumber = $("#txtVehNumber").val();
+                    Adddata.VehicleType = _vehType;
+                    Adddata.SelfDriving = _drivetype;
+                    Adddata.RequestId = $("#hidRequestId").val();
+                    Adddata.Email = $("#hidEmail").val();
+                    $.ajax({
+                        url: apiURL,
+                        type: 'POST',
+                        data: Adddata,
+                        dataType: 'json',
+                        success: function (data) {
+                            window.location.href = 'RequestEnd.html?reqid=' + btoa($("#hidRequestId").val()) + '&mail=' + btoa($("#hidEmail").val());
+                        },
+                        statusCode: {
+                            404: function () {
+                                alert('Failed');
+                                $("#loading").hide();
+                            }
+                        }
+                    });
+                }
+            }
+            else {
+                $("#loading").hide();
+                $("#container").show()
+            }
+        });
+    });
+
+    function FormValidations() {
+        var _dept = $("#selDept option:selected").val();
+        var _drivetype = $("input[name='drivetype']:checked").val();
+        if ($("#txtCompany").val() == "") {
+            alert('Please Enter Company');
+            $("#txtCompany").focus();
+            return false;
+        }
+        else if ($("#txtDate").val() == "") {
+            alert('Please Select Visit Date');
+            $("#txtDate").focus();
+            return false;
+        }
+        else if (parseInt(_dept) == 0) {
+            alert('Plese Select Department.');
+            $("#selDept").focus();
+            return false;
+        }
+        else if ($("#txtPersons").val() != "") {
+            if (parseInt($("#txtPersons").val()) < 1 || parseInt($("#txtPersons").val()) > 10) {
+                alert('Please Enter No.of Persons in between 1 and 10.');
+                $("#txtPersons").focus();
+                return false;
+            }
+        }
+
+        if ($("#txtPurpose").val() == "") {
+            alert('Please Enter Visit Purpose.');
+            $("#txtPurpose").focus();
+            return false;
+        }
+        else if (parseInt(_vehType) > 0) {
+            if ($("#txtVehNumber").val() == "") {
+                alert('Please Enter Vehicle Number.');
+                $("#txtVehNumber").focus();
+                return false;
+            }
+        }
+        return true;
+    }
+</script>

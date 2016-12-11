@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <!--<meta name="msapplication-tap-highlight" content="no" />-->
+        <meta name="viewport" content="user-scalable=yes, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+        <title>Article Request</title>
+        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" type="text/css" href="css/loading.css">
+		<link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Raleway'>
+        <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Ubuntu'>
+    </head>
+    <body onload="onLoad()">
+        <div id="loading" class="loading">Loading&#8230;</div>
+        <div id="header1" class="headerbar">
+            <img alt="logo" class="imglogo" src="img/logo.png"><br>
+            <strong><span class="headertext">KRISHNAPATNAM PORT</span></strong>
+        </div>
+        <div class="container-fluid text-center">
+            <div class="page-header text-left">
+                <span id="myModalLabel">Article Request</span>
+            </div>
+            <form class="form-horizontal text-left" role="form">
+                <div class="form-group">
+                    <label for="txtitemname" class="col-lg-2 control-label">Name</label>
+                    <div class="col-lg-10">                        
+                                 <input type="text" readonly="true" class="inputtext" id="txtitemname" name="txtitemname" value="Item Name">
+                    </div>
+                    
+                    <label for="txtitemtype" class="col-lg-2 control-label">Type</label>
+                    <div class="col-lg-10">
+                            <input type="text" readonly="true" class="inputtext" id="txtitemtype" name="txtitemtype" value="Item Type">            
+                    </div>
+                    
+                    
+                    <label for="txtitemdesc" class="col-lg-2 control-label">Description</label>
+                    <div class="col-lg-10">                        
+                            <input type="text" readonly="true" cols="40" rows="5" class="inputtext" id="txtitemdesc" name="txtitemdesc"
+                                   value="">                        
+                    </div>
+                    
+                    <label for="txtitemstat" class="col-lg-2 control-label">Status</label>
+                    <div class="col-lg-10">                        
+                            <input type="text" readonly="true" class="inputtext" id="txtitemstatus" name="txtitemstatus" value="">                        
+                    </div>
+                    
+           <div id="divvalidateitem" >
+                    <label for="txtitemissuedtolabel" class="col-lg-2 control-label">Issued To</label>
+                    <div class="col-lg-10">
+                       <input type="text" readonly="true" class="inputtext" id="txtitemissto" name="txtitemissuedname" value="Bobbi">
+                    </div>
+                    <label for="txtitemissuedonlabel" class="col-lg-2 control-label">Issued On</label>
+                    <div class="col-lg-10">
+                       <input type="text" readonly="true" class="inputtext" id="txtitemissuedon" name="txtitemissuedondate" value="12:12:2015">
+                    </div>
+                </div>    
+                    
+                    <div id="divissueitem" >
+                    <label for="txtitemissuedtolabel" class="col-lg-2 control-label">Issue To</label>
+                    <div class="col-lg-10">
+                       <input type="text" class="inputtext" id="txtitemissuetopresent" name="txtitemissuetopresent" value="">
+                    </div>                    
+                </div>    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <div class="col-lg-2"></div>
+                    <div class="col-lg-10">
+                        <br>
+                        <button type="button" class="btn btn-custom" id="btnissue">Issue Article<span class="glyphicon glyphicon-circle-arrow-down"></span></button>
+                    </div>
+                </div>                
+            </form>
+        </div>
+        <input type="hidden" id="hiditemcode">
+        <input type="hidden" id="hiditemid">
+        <!--<div class="navbar-fixed-bottom footer">
+            <div class="text-center">
+                <small><span class="text-primary">© <script>document.write(new Date().getFullYear())</script> - KRISHNAPATNAM PORT COMPANY LTD.</span></small>
+            </div>
+        </div>-->
+    </body>
+</html>
+<script type="text/ecmascript" src="bootstrap/js/bootstrap.min.js"></script>
+<script type="text/ecmascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+<script type="text/javascript">
+    var clntHeight = parseFloat(document.documentElement.clientHeight) - 140;
+    var apiURL = 'http://61.0.225.169/vpmsapi/api/VisitorRequest';
+    var apiURLarticle = 'http://172.168.8.151/ArticleIssue/api/Articleissue/IssueArticle';
+    function onLoad() {
+        document.addEventListener("deviceready", onDeviceReady, false);
+    }
+
+    /* device APIs are available */
+    function onDeviceReady() {
+        /* Register the event listener */
+        document.addEventListener("backbutton", onBackKeyDown, false);
+        checkConnection();
+    }
+
+    /* Handle the back button */
+    function onBackKeyDown() {
+    }
+
+    function isPhoneGap() {
+        return (window.cordova || window.PhoneGap || window.phonegap)
+            && /^file:\/{3}[^\/]/i.test(window.location.href)
+            && /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent);
+    }
+
+    function checkConnection() {
+        if (isPhoneGap()) {
+            var networkState = navigator.connection.type;
+            var states = {};
+            states[Connection.UNKNOWN] = 'Unknown connection';
+            states[Connection.ETHERNET] = 'Ethernet connection';
+            states[Connection.WIFI] = 'WiFi connection';
+            states[Connection.CELL_2G] = 'Cell 2G connection';
+            states[Connection.CELL_3G] = 'Cell 3G connection';
+            states[Connection.CELL_4G] = 'Cell 4G connection';
+            states[Connection.CELL] = 'Cell generic connection';
+            states[Connection.NONE] = 'No network connection';
+
+            //alert('Connection type: ' + states[networkState]);
+            if (states[networkState] == 'No network connection' || states[networkState] == 'Unknown connection')
+                alert('No Internet Connection. Please Check.');
+        }
+    }
+    var myvar = setInterval(checkConnection, 3000);
+    
+         var qsParm = new Array();
+    
+    function callissued()
+    {
+        debugger;
+         var textstatus = $('#txtitemstatus').val();                     
+         if(textstatus=='ItemReady')
+             {
+              $("#divvalidateitem").hide(); 
+              $("#divissueitem").show(); 
+             }
+         else
+         {
+             $("#divvalidateitem").show();
+             $("#divissueitem").hide(); 
+              $("#btnissue").attr('disabled', 'disabled');             
+         }
+    }
+    
+    function qs() {
+        debugger;
+        var query = window.location.search.substring(1);
+        var parms = query.split('&');
+        for (var i = 0; i < parms.length; i++) {
+            var pos = parms[i].indexOf('=');
+            if (pos > 0) {
+                var key = parms[i].substring(0, pos);
+                var val = parms[i].substring(pos + 1);
+                qsParm[key] = val;
+            }
+        }
+
+        if (parms.length > 0) {
+            $("#hiditemcode").val(qsParm["id"]);
+            var textname = $('#hiditemcode');            
+        }
+    }
+
+    function getdata()
+    {
+         $.ajax({
+            url: 'http://172.168.8.151/ArticleIssue/api/Articleissue/Getitemdetails?Itemcode=' + $("#hiditemcode").val(),
+            type: 'GET',
+            data: '{}',
+            dataType: 'json',            
+            success: function (result) {
+                if (result.length > 0) {
+                    
+                    $("#hiditemid").val(result[0].ItemID);
+                    
+                     var textname = $('#txtitemname');
+                     textname.val(result[0].Itemname);   
+                    
+                     var textdesc = $('#txtitemdesc');
+                     textdesc.val(result[0].Itemdescription);
+                    
+                     var texttype = $('#txtitemtype');
+                     texttype.val(result[0].TypeName);
+                    
+                     var textstatus = $('#txtitemstatus');
+                     textstatus.val(result[0].Itemstatus);
+                    
+                     var textitemissuedto = $('#txtitemissto');                    
+                     textitemissuedto.val(result[0].Itemissuedto);
+                    
+                    var textitemissuedon = $('#txtitemissuedon');                    
+                     textitemissuedon.val(result[0].Itemissuedon);                   
+                    callissued();
+                        
+                }
+                else {                    
+                    alert('No data found.');
+                }
+                $("#loading").hide();
+            },
+            error: function () {                
+                alert('Error occurred while Visitor Pass Details.');
+                $("#loading").hide();
+            }
+        });
+    }
+
+    $(document).ready(function () {        
+        $("#loading").show();
+        $("#divvalidateitem").hide();
+        qs();
+        debugger;        
+        getdata();
+
+        //Issue Item Code
+        $("#btnissue").click(function () {            
+            if ($("#txtitemissuetopresent").val() == "") {
+                alert('Please Enter Person to issue');
+                $("#txtitemissuetopresent").focus();
+                return false;
+            }
+            else if ($("#txtitemissuetopresent").val() != "") 
+                {
+                    debugger;
+                    $("#loading").show();                    
+                    var Adddata = {};                                        
+                    var itemid = $('#hiditemid').val(); 
+                    var textitemissuedto = $('#txtitemissuetopresent').val(); 
+                    Adddata.ItemID = itemid;
+                    Adddata.Itemissuedto = textitemissuedto;                    
+                    $.ajax({
+                        url: 'http://172.168.8.151/ArticleIssue/api/Articleissue/IssueArticle',
+                        type: 'POST',
+                        data: Adddata,
+                        dataType: 'json',
+                        success: function (data) {
+                            alert(status);
+                             $("#loading").hide();
+                            getdata();
+                        },
+                        /*statusCode: {
+                        404: function () {
+                        alert('Failed');
+                        $("#divloading").hide();
+                        }
+                        }*/
+                        error: function (xhr, status, error) {
+                            alert(status);
+                            alert('Request Failed. Please try again.');                           
+                        }
+                    });
+                }
+            
+        });
+
+    });
+</script>
