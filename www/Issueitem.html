@@ -92,8 +92,8 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
 <script type="text/javascript">
     var clntHeight = parseFloat(document.documentElement.clientHeight) - 140;
-    var apiURL = 'http://61.0.225.169/vpmsapi/api/VisitorRequest';
-    var apiURLarticle = 'http://172.168.8.151/ArticleIssue/api/Articleissue/IssueArticle';
+    var apiURL = 'http://202.83.27.199/Artrackapp/api/VisitorRequest';
+    var apiURLarticle = 'http://202.83.27.199/Artrackapp/api/Articleissue/IssueArticle';
     function onLoad() {
         document.addEventListener("deviceready", onDeviceReady, false);
     }
@@ -176,7 +176,7 @@
     function getdata()
     {
          $.ajax({
-            url: 'http://172.168.8.151/ArticleIssue/api/Articleissue/Getitemdetails?Itemcode=' + $("#hiditemcode").val(),
+            url: 'http://202.83.27.199/Artrackapp/api/Articleissue/Getitemdetails?Itemcode=' + $("#hiditemcode").val(),
             type: 'GET',
             data: '{}',
             dataType: 'json',            
@@ -241,7 +241,7 @@
                     Adddata.ItemID = itemid;
                     Adddata.Itemissuedto = textitemissuedto;                    
                     $.ajax({
-                        url: 'http://172.168.8.151/ArticleIssue/api/Articleissue/IssueArticle',
+                        url: 'http://202.83.27.199/Artrackapp/api/Articleissue/IssueArticle',
                         type: 'POST',
                         data: Adddata,
                         dataType: 'json',

@@ -9,6 +9,7 @@
         <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="css/index.css">
         <link rel="stylesheet" type="text/css" href="css/loading.css">
+           <link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.css">
 		<link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Raleway'>
         <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Ubuntu'>
     </head>
@@ -16,7 +17,13 @@
         <div id="loading" class="loading">Loading&#8230;</div>
         <div id="header1" class="headerbar">
             <img alt="logo" class="imglogo" src="img/logo.png"><br>
-            <strong><span class="headertext">KRISHNAPATNAM PORT</span></strong>
+            <table style="background: transparent; width: 100%;align:center">
+                <tr>
+                    <td class="topbar-icon text-left"><i id="home" class="fa fa-home fa-2x" aria-hidden="true"></i></td>
+                    <td class="text-center"><span class="headertext">KRISHNAPATNAM PORT</span></td>
+                    <td class="topbar-icon text-right"><a href="Issueitem.html"><i class="fa fa-sign-out fa-2x" aria-hidden="true"></i></a></td>
+                </tr>
+            </table>
         </div>
         <div class="container-fluid text-center">
             <div class="page-header text-left">
@@ -146,7 +153,7 @@
              $.ajax({
             type: "GET",
             contentType: "application/json; charset=utf-8",
-            url: 'http://172.168.8.151/ArticleIssue/api/Articleissue/GetItemTypes',
+            url: 'http://202.83.27.199/Artrackapp/api/Articleissue/GetItemTypes',
             dataType: "json",
             data: '{}',
             async: false,
@@ -164,7 +171,7 @@
     });
     $("#btnSubmit").click(function () {
         var _sell = $("#sellist option:selected").val();
-        var apiURLarticle = 'http://172.168.8.151/ArticleIssue/api/Articleissue/AddArticle';
+        var apiURLarticle = 'http://202.83.27.199/Artrackapp/api/Articleissue/AddArticle';
         debugger;
         var Adddata = {};
         Adddata.Itemname = $("#txtitemname").val();
