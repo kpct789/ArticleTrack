@@ -113,8 +113,7 @@
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/jquery1.11.1-min.js"></script>
 <script type="text/javascript">
-    var clntHeight = parseFloat(document.documentElement.clientHeight) - 140;
-    var apiURL = 'http://202.83.27.199/Artrackapp/api/VisitorRequest';
+    var clntHeight = parseFloat(document.documentElement.clientHeight) - 140;    
     var apiURLarticle = 'http://202.83.27.199/Artrackapp/api/Articleissue/IssueArticle';
     function onLoad() {
         document.addEventListener("deviceready", onDeviceReady, false);
@@ -297,7 +296,7 @@
                 if (!result.cancelled) {
                     $("#hiditemcode").val(result);
                     var textcode = $('#txtarticlecode');
-                     textcode.val(result);
+                     textcode.val(result.text);
                     
                 }
             },
