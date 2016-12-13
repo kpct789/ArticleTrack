@@ -11,12 +11,19 @@
         <link rel="stylesheet" type="text/css" href="css/loading.css">
 		<link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Raleway'>
         <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Ubuntu'>
+        <link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.css">
     </head>
     <body onload="onLoad()">
         <div id="loading" class="loading">Loading&#8230;</div>
-        <div id="header1" class="headerbar">
+            <div id="header1" class="headerbar">
             <img alt="logo" class="imglogo" src="img/logo.png"><br>
-            <strong><span class="headertext">KRISHNAPATNAM PORT</span></strong>
+            <table style="background: transparent; width: 100%;align:center">
+                <tr>
+                    <td class="topbar-icon text-left"><i id="home" class="fa fa-home fa-2x" aria-hidden="true"></i></td>
+                    <td class="text-center"><span class="headertext">KRISHNAPATNAM PORT</span></td>
+                    <td class="topbar-icon text-right"><a href="Home.html"><i class="fa fa-sign-out fa-2x" aria-hidden="true"></i></a></td>
+                </tr>
+            </table>
         </div>
         <div class="container-fluid text-center">
             <div class="page-header text-left">
@@ -24,10 +31,29 @@
             </div>
             <form class="form-horizontal text-left" role="form">
                 <div class="form-group">
+                    
+                        <label for="txtitemcode" class="col-lg-2 control-label">Article Code</label>
+                    <div class="col-lg-10">                        
+                                  <div class="input-group">
+                        <input type="text" id="txtarticlecode" class="inputtext" style="text-transform: uppercase;" placeholder="Enter or Scan Article code">
+                        <span id="imgScan" class="input-group-addon">
+                            <!--<img alt="scan" src="img/scan.PNG" width="25px" height="25px" />-->
+                            <i class="fa fa-qrcode fa-lg" aria-hidden="true" style="color: #686868"></i>
+                        </span>
+                        <span id="imgSearch" class="input-group-addon">
+                            <!--<img alt="Search" src="img/search.PNG" width="20px" height="23px" style="cursor: pointer;" />-->
+                            <i class="fa fa-search fa-lg" aria-hidden="true" style="color: #686868"></i>
+                        </span>
+                    </div>
+                    </div>
+                    
+                    
                     <label for="txtitemname" class="col-lg-2 control-label">Name</label>
                     <div class="col-lg-10">                        
                                  <input type="text" readonly="true" class="inputtext" id="txtitemname" name="txtitemname" value="Item Name">
                     </div>
+                    
+                    
                     
                     <label for="txtitemtype" class="col-lg-2 control-label">Type</label>
                     <div class="col-lg-10">
@@ -90,6 +116,7 @@
 <script type="text/ecmascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+<script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
 <script type="text/javascript">
     var clntHeight = parseFloat(document.documentElement.clientHeight) - 140;
     var apiURL = 'http://202.83.27.199/Artrackapp/api/VisitorRequest';
@@ -205,9 +232,7 @@
                     callissued();
                         
                 }
-                else {                    
-                    alert('No data found.');
-                }
+                else
                 $("#loading").hide();
             },
             error: function () {                
@@ -220,11 +245,16 @@
     $(document).ready(function () {        
         $("#loading").show();
         $("#divvalidateitem").hide();
-        qs();
-        debugger;        
-        getdata();
-
-        //Issue Item Code
+         $("#imgScan").click(function () {
+            scan();            
+        });      
+        $("#imgSearch").click(function () {            
+            debugger;            
+           var textcode = $('#txtarticlecode').val();                        
+           $('#hiditemcode').val(textcode);
+            getdata();
+        });      
+        
         $("#btnissue").click(function () {            
             if ($("#txtitemissuetopresent").val() == "") {
                 alert('Please Enter Person to issue');
@@ -264,6 +294,22 @@
                 }
             
         });
-
+         $("#loading").hide();
     });
+    
+  function scan() {
+        cordova.plugins.barcodeScanner.scan(
+            function (result) {
+                if (!result.cancelled) {
+                    $("#hiditemcode").val(result);
+                    var textcode = $('#txtarticlecode');
+                     textcode.val(result);
+                    
+                }
+            },
+            function (error) {
+                alert("Scanning failed: " + error);
+            }
+       );
+    }
 </script>
