@@ -127,19 +127,24 @@
                  <br/>
             <table>
                 <tr>
-                    <td style="padding: 7px;">
-                        <div class="box box1">
+                    <td style="padding: 7px;">                         
+                        <a href="scann.html">
+                            <div class="box box1">
                             <span><i class="fa fa-plus-circle fa-5x" aria-hidden="true"></i></span><br>
                             <label>Create Article</label>
-                        </div>
+                                </div>
+                        </a>
+                            
                     </td>
                 </tr>
                 <tr>
                     <td style="padding: 7px;">
-                        <div class="box box2">
+                        <a href="Issueitem.html">
+                             <div class="box box2">
                             <span><i class="fa fa-pencil-square-o fa-5x" aria-hidden="true"></i></span><br>
                             <label>Issue Article</label>
-                        </div>
+                            </div>
+                        </a>
                     </td>
                 </tr>          
             </table>
@@ -147,17 +152,3 @@
         </div>
     </body>
 </html>
-<script type="text/javascript" src="js/jquery1.11.1-min.js"></script>
-<script type="text/javascript">        
-  $(document).ready(function(){        
-        $("#loading").hide();
-        $(".box1").click(function(){
-            $("#loading").show();
-            window.location.href = 'scann.html';
-        });
-        $(".box2").click(function(){
-            $("#loading").show();
-            window.location.href = 'issueitem.html';
-        });        
-    });
-</script>
