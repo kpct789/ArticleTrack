@@ -166,7 +166,8 @@
          if(textstatus=='ItemReady')
              {
               $("#divvalidateitem").hide(); 
-              $("#divissueitem").show(); 
+              $("#divissueitem").show();                  
+             $('#btnissue').removeAttr('disabled');
              }
          else
          {
@@ -191,7 +192,8 @@
 
         if (parms.length > 0) {
             $("#hiditemcode").val(qsParm["id"]);
-            var textname = $('#hiditemcode');            
+            var textname = $('#hiditemcode');  
+            getdata();
         }
     }
 
@@ -239,6 +241,7 @@
 
     $(document).ready(function () {        
         $("#loading").show();
+        qs();
         $("#divvalidateitem").hide();
          $("#imgScan").click(function () {
             scan();            
