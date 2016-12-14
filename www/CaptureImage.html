@@ -198,8 +198,7 @@
             return;
         }
         document.getElementById('camera_image').style.display = "none";
-        var server = 'http://202.83.27.199/Artrackapp/api/ArticleFileUpload/ArticleUploadFile'
-        alert(server);
+        var server = 'http://202.83.27.199/Artrackapp/api/ArticleFileUpload/ArticleUploadFile'        
         if (server) {
             var options = new FileUploadOptions();
             options.fileKey = "file";
@@ -209,8 +208,7 @@
             options.headers = {
                 Connection: "close"
             }
-            server = server + '/' + options.fileName;
-            alert(options.fileName);
+            server = server + '/' + options.fileName;            
             //document.getElementById('camera_status').innerHTML = options.fileName;
 
             var ft = new FileTransfer();
