@@ -192,7 +192,10 @@
 
         if (parms.length > 0) {
             $("#hiditemcode").val(qsParm["id"]);
-            var textname = $('#hiditemcode');  
+            var textcode = $('#hiditemcode').val(); 
+            var codename = $('#txtarticlecode');
+                     codename.val(textcode);   
+            alert(textcode)
             getdata();
         }
     }

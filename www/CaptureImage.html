@@ -103,6 +103,7 @@
     }
 
     function qs() {
+        debugger;
         var query = window.location.search.substring(1);
         var parms = query.split('&');
         for (var i = 0; i < parms.length; i++) {
@@ -113,8 +114,8 @@
                 qsParm[key] = val;
             }
         }
-        if (parms.length > 1) {
-            $("#hidRequestId").val(atob(qsParm["id"]));            
+        if (parms.length >= 1) {
+            $("#hidRequestId").val(qsParm["id"]);                        
         }
       
     }
@@ -197,7 +198,8 @@
             return;
         }
         document.getElementById('camera_image').style.display = "none";
-        var server = 'http://202.83.27.199/Artrackapp/api/ArticleFileUpload/ArticleUploadFile?name=' + $("#hidRequestId").val();
+        var server = 'http://202.83.27.199/Artrackapp/api/ArticleFileUpload/ArticleUploadFile'
+        alert(server);
         if (server) {
             var options = new FileUploadOptions();
             options.fileKey = "file";
@@ -208,12 +210,13 @@
                 Connection: "close"
             }
             server = server + '/' + options.fileName;
+            alert(options.fileName);
             //document.getElementById('camera_status').innerHTML = options.fileName;
 
             var ft = new FileTransfer();
             ft.upload(imageURI, encodeURI(server), function (r) {
                 document.getElementById('camera_status').innerHTML = "Picture Uploaded successfully."; // + (parseFloat(parseFloat(r.bytesSent) / 1024) / 1024) + " MB uploaded.";
-                window.location.href = 'Issueitem.html?id='+$("#hidRequestId").val();
+                window.location.href = 'Home.html';
             }, function (error) {
                 $("#loading").hide();
                 document.getElementById('camera_status').innerHTML = "Upload failed: Code = " + error.code + "\n upload error source " + error.source + "\n upload error target " + error.target;
