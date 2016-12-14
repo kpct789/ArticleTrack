@@ -267,13 +267,14 @@
                     Adddata.Itemissuedto = textitemissuedto;                    
                     $.ajax({
                         url: 'http://202.83.27.199/Artrackapp/api/Articleissue/IssueArticle',
+                        //url: 'http://172.168.8.151/ArticleIssue/api/Articleissue/IssueArticle',
                         type: 'POST',
                         data: Adddata,
                         dataType: 'json',
                         success: function (data) {                            
                             $("#hidRequestId").val(data)
                             alert('Data Saved..Redirecting to capture Image');
-                          window.location.href = 'CaptureImage.html?id=' + result.text;
+                          window.location.href = 'CaptureImage.html?id=' + $("#hidRequestId").val();
                         },
                         /*statusCode: {
                         404: function () {

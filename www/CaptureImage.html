@@ -213,7 +213,7 @@
             var ft = new FileTransfer();
             ft.upload(imageURI, encodeURI(server), function (r) {
                 document.getElementById('camera_status').innerHTML = "Picture Uploaded successfully."; // + (parseFloat(parseFloat(r.bytesSent) / 1024) / 1024) + " MB uploaded.";
-                window.location.href = 'Issueitem.html?id='$("#hidRequestId").val();
+                window.location.href = 'Issueitem.html?id='+$("#hidRequestId").val();
             }, function (error) {
                 $("#loading").hide();
                 document.getElementById('camera_status').innerHTML = "Upload failed: Code = " + error.code + "\n upload error source " + error.source + "\n upload error target " + error.target;
