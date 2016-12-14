@@ -101,6 +101,8 @@
         </div>
         <input type="hidden" id="hiditemcode">
         <input type="hidden" id="hiditemid">
+        <input type="hidden" id="hidRequestId">
+        
         <!--<div class="navbar-fixed-bottom footer">
             <div class="text-center">
                 <small><span class="text-primary">© <script>document.write(new Date().getFullYear())</script> - KRISHNAPATNAM PORT COMPANY LTD.</span></small>
@@ -268,10 +270,10 @@
                         type: 'POST',
                         data: Adddata,
                         dataType: 'json',
-                        success: function (data) {
-                            alert(status);
-                             $("#loading").hide();
-                            getdata();
+                        success: function (data) {                            
+                            $("#hidRequestId").val(data)
+                            alert('Data Saved..Redirecting to capture Image');
+                          window.location.href = 'CaptureImage.html?id=' + result.text;
                         },
                         /*statusCode: {
                         404: function () {

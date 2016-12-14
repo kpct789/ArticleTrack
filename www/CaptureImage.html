@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Photo Capture and Upload</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" type="text/css" href="css/loading.css">
+	    <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Raleway'>
+        <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Ubuntu'>
+        <style type="text/css">
+            table {
+                width: 100%;
+            }
+            td {
+                padding: 2px;
+                width: 50%;
+            }
+            div>label{
+                color: white;
+                font-size: 13px;
+                font-weight: bold;
+                font-family: Ubuntu;
+                padding: 10px;
+                text-shadow: 2px 2px 2px #838383;
+            }
+            .divimg{
+                cursor: pointer; 
+                border-radius: 10px; 
+                padding: 20px; 
+                height: 140px;
+            }
+        </style>
+    </head>
+    <body onload="onLoad()">
+        <div id="loading" class="loading">Loading&#8230;</div>
+        <div id="header1" class="headerbar">
+            <img alt="logo" class="imglogo" src="img/logo.png"><br>
+            <strong><span class="headertext">KRISHNAPATNAM PORT</span></strong>
+        </div>
+        <div id="container" class="container text-center">
+            <div class="page-header text-left">
+                <span id="myModalLabel">Take Picture</span>
+            </div>
+            <table style="border: 0px solid;">
+                <tr>
+                    <td colspan="2" style="text-align: center;"><img alt="image" style="width:100px; visibility:hidden; display:none;" id="camera_image" src="" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;"><span id="camera_status"></span></td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        <div class="divimg" style="background-color: #00AEAD;">
+                            <img alt="Take Picture" src="img/camera.PNG" height="60" width="80" onclick="takePicture();"><br>
+                            <label>Take Picture</label>
+                        </div>
+                    </td>
+                    <td style="text-align: center;">
+                        <div class="divimg" style="background-color: #5B6275;">
+                            <img alt="Select Picture from Gallery" src="img/pictures.PNG" height="60" width="80" onclick="selectPicture();"><br>
+                            <label>Select Picture</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        <div class="divimg" style="background-color: #E74C3C;">
+                            <img alt="Select Picture from Gallery" src="img/upload.PNG" height="70" width="80" id="btnUpload" onclick="uploadPicture();"><br>
+                            <label>Upload Picture</label>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" id="hidRequestId">
+            <input type="hidden" id="hidEmail">            
+        </div>
+        <!--<div class="navbar-fixed-bottom footer">
+            <div class="text-center">
+                <small><span class="text-primary">© <script>document.write(new Date().getFullYear())</script> - KRISHNAPATNAM PORT COMPANY LTD.</span></small>
+            </div>
+        </div>-->
+    </body>
+</html>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/phonegap-1.1.0.js"></script>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript">
+    var deviceReady = false;
+    var qsParm = new Array();
+
+    function onLoad() {
+        document.addEventListener("deviceready", onDeviceReady, false);
+    }
+
+    function onDeviceReady() {
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+    }
+
+    function qs() {
+        var query = window.location.search.substring(1);
+        var parms = query.split('&');
+        for (var i = 0; i < parms.length; i++) {
+            var pos = parms[i].indexOf('=');
+            if (pos > 0) {
+                var key = parms[i].substring(0, pos);
+                var val = parms[i].substring(pos + 1);
+                qsParm[key] = val;
+            }
+        }
+        if (parms.length > 1) {
+            $("#hidRequestId").val(atob(qsParm["id"]));            
+        }
+      
+    }
+
+    function isPhoneGap() {
+        return (window.cordova || window.PhoneGap || window.phonegap)
+            && /^file:\/{3}[^\/]/i.test(window.location.href)
+            && /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent);
+    }
+
+    function checkConnection() {
+        if (isPhoneGap()) {
+            var networkState = navigator.connection.type;
+            var states = {};
+            states[Connection.UNKNOWN] = 'Unknown connection';
+            states[Connection.ETHERNET] = 'Ethernet connection';
+            states[Connection.WIFI] = 'WiFi connection';
+            states[Connection.CELL_2G] = 'Cell 2G connection';
+            states[Connection.CELL_3G] = 'Cell 3G connection';
+            states[Connection.CELL_4G] = 'Cell 4G connection';
+            states[Connection.CELL] = 'Cell generic connection';
+            states[Connection.NONE] = 'No network connection';
+
+            //alert('Connection type: ' + states[networkState]);
+            if (states[networkState] == 'No network connection' || states[networkState] == 'Unknown connection')
+                alert('No Internet Connection. Please Check.');
+        }
+    }
+    var myvar = setInterval(checkConnection, 3000);
+
+    $(document).ready(function () {
+        qs();
+        $("#loading").hide();
+    });
+
+    function takePicture() {
+        navigator.camera.getPicture(
+            function (uri) {
+                var img = document.getElementById('camera_image');
+                img.style.visibility = "visible";
+                img.style.display = "block";
+                img.src = uri;
+                document.getElementById('camera_status').innerHTML = "Success";
+            },
+            function (e) {
+                console.log("Error getting picture: " + e);
+                document.getElementById('camera_status').innerHTML = "Error getting picture.";
+            },
+            { quality: 50, destinationType: navigator.camera.DestinationType.FILE_URI, correctOrientation: true }
+        );
+    };
+
+    function selectPicture() {
+        navigator.camera.getPicture(
+            function (uri) {
+                var img = document.getElementById('camera_image');
+                img.style.visibility = "visible";
+                img.style.display = "block";
+                img.src = uri;
+                document.getElementById('camera_status').innerHTML = "Success";
+            },
+            function (e) {
+                console.log("Error getting picture: " + e);
+                document.getElementById('camera_status').innerHTML = "Error getting picture.";
+            },
+            { quality: 50, destinationType: navigator.camera.DestinationType.FILE_URI,
+                sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY
+            }
+        );
+    };
+
+    function uploadPicture() {
+        $("#loading").show();
+        var img = document.getElementById('camera_image');
+        var imageURI = img.src;
+        if (!imageURI || (img.style.display == "none")) {
+            alert('Take Picture or Select Picture from library.');
+            document.getElementById('camera_status').innerHTML = "Take picture or Select picture from library.";
+            $("#loading").hide();
+            return;
+        }
+        document.getElementById('camera_image').style.display = "none";
+        var server = 'http://202.83.27.199/Artrackapp/api/ArticleFileUpload/ArticleUploadFile';
+        if (server) {
+            var options = new FileUploadOptions();
+            options.fileKey = "file";
+            options.fileName = $("#hidRequestId").val();
+            options.mimeType = "image/jpeg";
+            options.chunkedMode = false;
+            options.headers = {
+                Connection: "close"
+            }
+            server = server + '/' + options.fileName;
+            //document.getElementById('camera_status').innerHTML = options.fileName;
+
+            var ft = new FileTransfer();
+            ft.upload(imageURI, encodeURI(server), function (r) {
+                document.getElementById('camera_status').innerHTML = "Picture Uploaded successfully."; // + (parseFloat(parseFloat(r.bytesSent) / 1024) / 1024) + " MB uploaded.";
+                window.location.href = 'Issueitem.html?id='$("#hidRequestId").val();
+            }, function (error) {
+                $("#loading").hide();
+                document.getElementById('camera_status').innerHTML = "Upload failed: Code = " + error.code + "\n upload error source " + error.source + "\n upload error target " + error.target;
+            }, options);
+        }
+    }
+
+    function init() {
+        document.addEventListener("deviceready", function () { deviceReady = true; }, false);
+        window.setTimeout(function () {
+            if (!deviceReady) {
+                alert("Error: Camera not initialised.");
+            }
+        }, 2000);
+    }
+</script>
