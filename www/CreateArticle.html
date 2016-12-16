@@ -143,17 +143,13 @@
         $("#loading").show();                
         qs();
         var itemcode = $('#hiditemcode').val(); 
-        
-        
         var text = $('#txtitemcode');
         text.val(itemcode); 
-        
-        
-              
              $.ajax({
             type: "GET",
             contentType: "application/json; charset=utf-8",
             url: 'http://202.83.27.199/Artrackapp/api/Articleissue/GetItemTypes',
+                 
             dataType: "json",
             data: '{}',
             async: false,
@@ -184,11 +180,11 @@
             data: Adddata,
             dataType: 'json',
             success: function (data) {
-                alert('Created Article');
+                alert(data);
                 window.location.href = 'Home.html';
             },
             error: function (xhr, status, error) {
-                alert(status);
+                alert(xhr);
                 alert('Request Failed. Please try again.');
                 $("#test").val("");
                 $("#test1").val("");
