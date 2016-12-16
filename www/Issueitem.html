@@ -231,7 +231,10 @@
                         
                 }
                 else
+                    {
                 $("#loading").hide();
+                        alert('No data with this code');
+                    }
             },
             error: function () {                
                 alert('Error occurred while Article Details.');

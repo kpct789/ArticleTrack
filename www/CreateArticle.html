@@ -169,6 +169,12 @@
         var _sell = $("#sellist option:selected").val();
         var apiURLarticle = 'http://202.83.27.199/Artrackapp/api/Articleissue/AddArticle';
         debugger;
+        if(_sell==0)
+            {
+                alert('Please select item type');
+            }
+            else
+                {
         var Adddata = {};
         Adddata.Itemname = $("#txtitemname").val();
         Adddata.TypeID = _sell;
@@ -190,5 +196,6 @@
                 $("#test1").val("");
             }
         });
+                }
     });
 </script>
