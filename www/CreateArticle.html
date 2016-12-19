@@ -167,12 +167,20 @@
     });
     $("#btnSubmit").click(function () {
         var _sell = $("#sellist option:selected").val();
+        var textitem = $('#txtitemname').val();
+        var textdesc = $('#txtitemdesc').val();
         var apiURLarticle = 'http://202.83.27.199/Artrackapp/api/Articleissue/AddArticle';
         debugger;
         if(_sell==0)
             {
                 alert('Please select item type');
             }
+        else if(textitem=="")
+        {
+            alert('Please fill item name');
+        }
+        else if(textdesc=="")
+            {alert('Please fill item desc');}
             else
                 {
         var Adddata = {};
